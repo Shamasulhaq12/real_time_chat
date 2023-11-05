@@ -7,13 +7,30 @@ from .models import (
     RoomMessage,
     ChatAttachment,
     GroupRoomMessage,
+    Reaction,
 )
+
+
+class ReactionUsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'first_name', 'last_name', 'image']
+
+
+class ReactionSerializer(serializers.ModelSerializer):
+    profile = ReactionUsersSerializer(read_only=True)
+
+    class Meta:
+        model = Reaction
+        fields = '__all__'
+        read_only_fields = ('updated_at', 'created_at', 'profile')
 
 
 class GroupRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupRoom
         fields = '__all__'
+
 
 class AllOnlineStatuserializer(serializers.ModelSerializer):
     online_status = serializers.SerializerMethodField()
@@ -56,6 +73,7 @@ class GroupRoomMessageSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(source='profile.last_name')
     image = serializers.FileField(source='profile.image')
     attachment = ChatAttachmentSerializer(read_only=True)
+    reactions = ReactionSerializer(read_only=True, many=True)
 
     class Meta:
         model = GroupRoomMessage
@@ -178,6 +196,7 @@ class RoomMessageSerializer(serializers.ModelSerializer):
         source='owner.first_name', read_only=True)
     last_name = serializers.CharField(source='owner.last_name', read_only=True)
     image = serializers.FileField(source='owner.image', read_only=True)
+    reactions = ReactionSerializer(read_only=True, many=True)
 
     class Meta:
         model = RoomMessage
@@ -196,6 +215,7 @@ class RoomMessageSerializer(serializers.ModelSerializer):
         source='owner.first_name', read_only=True)
     user_name = serializers.CharField(
         source='owner.user.username', read_only=True)
+    reactions = ReactionSerializer(read_only=True, many=True)
 
     class Meta:
         model = RoomMessage

@@ -3,10 +3,27 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import (
     GroupRoomSerializer,
+    ReactionSerializer,
 )
 from .models import (
     GroupRoom,
+    Reaction,
 )
+
+
+class ReactionViewSet(viewsets.ModelViewSet):
+    queryset = Reaction.objects.all()
+    serializer_class = ReactionSerializer
+
+    def get_queryset(self):
+        message_id = self.request.query_params.get('message_id', None)
+        return Reaction.objects.filter(message=message_id)
+
+    def create(self, request, *args, **kwargs):
+        serializer = ReactionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(profile=request.user.profile)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class GroupRoomViewSet(viewsets.ModelViewSet):

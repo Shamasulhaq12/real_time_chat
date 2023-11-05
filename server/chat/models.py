@@ -28,12 +28,38 @@ class ChatAttachment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+REACTION_CHOICES = (
+    ('like', 'like'),
+    ('love', 'love'),
+    ('haha', 'haha'),
+    ('wow', 'wow'),
+    ('sad', 'sad'),
+    ('angry', 'angry'),
+)
+
+
+class Reaction(models.Model):
+    profile = models.ForeignKey(
+        "userprofile.UserProfile", on_delete=models.CASCADE, related_name='profile_reactions')
+    room_message = models.ForeignKey(
+        "chat.GroupRoomMessage", on_delete=models.CASCADE, related_name='room_message_reactions', null=True, blank=True)
+    message = models.ForeignKey(
+        "chat.RoomMessage", on_delete=models.CASCADE, related_name='message_reactions', null=True, blank=True)
+    reaction = models.CharField(
+        max_length=255, choices=REACTION_CHOICES, default='like')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 class GroupRoomMessage(models.Model):
     room = models.ForeignKey(
         GroupRoom, on_delete=models.CASCADE, related_name='ws_room_messages')
     profile = models.ForeignKey(
         "userprofile.UserProfile", on_delete=models.CASCADE, related_name='profile_ws_room_messages')
     message = models.TextField(max_length=1000, null=True, blank=True)
+    reactions = models.ManyToManyField(
+        Reaction, related_name='reaction_ws_room_messages', blank=True)
+
     attachment = models.ForeignKey(ChatAttachment, on_delete=models.CASCADE,
                                    related_name='attachment_ws_room_messages', null=True, blank=True)
     is_file = models.BooleanField(default=False)
@@ -60,6 +86,8 @@ class RoomMessage(models.Model):
     message = models.TextField(max_length=1000, null=True, blank=True)
     attachment = models.ForeignKey(ChatAttachment, on_delete=models.CASCADE,
                                    related_name='attachment_room_messages', null=True, blank=True)
+    reactions = models.ManyToManyField(
+        Reaction, related_name='reaction_room_messages', blank=True)
     is_file = models.BooleanField(default=False)
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
