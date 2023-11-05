@@ -6,6 +6,8 @@ class GroupRoom(models.Model):
 
     profile = models.ManyToManyField(
         "userprofile.UserProfile", related_name='profile_rooms')
+    group_creator = models.ForeignKey(
+        "userprofile.UserProfile", on_delete=models.CASCADE, related_name='creator_rooms')
     group_admin = models.ManyToManyField(
         'userprofile.UserProfile', related_name='group_admin_rooms')
     group_moderator = models.ManyToManyField(
