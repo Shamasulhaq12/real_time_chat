@@ -3,7 +3,6 @@ from .consumers import (
     OnlineStatusConsumer,
     DashboardChatConsumer,
     UserOnlineStatusConsumer,
-    WorkspaceActivitySyncConsumer,
     WorkspaceActivityAsyncConsumer,
     CustomSendOfferStatusChangeConsumer,
 )
@@ -11,8 +10,7 @@ from django.urls import path
 
 
 websocket_urlpatterns = [
-    path('api/workspace/activity/chat/sc/',
-         WorkspaceActivitySyncConsumer.as_asgi()),
+
     path('api/workspace/activity/chat/',
          WorkspaceActivityAsyncConsumer.as_asgi()),
     path('api/dashboard/chat/', DashboardChatConsumer.as_asgi()),
