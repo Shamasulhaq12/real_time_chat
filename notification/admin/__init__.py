@@ -1,2 +1,0 @@
-from .notification_admin import NotificationAdmin
-from .notificationimage_admin import NotificationImageAdmin

@@ -1,2 +1,0 @@
-from .notification_model import NotificationDetails
-from .notificationimage_model import NotificationImage
