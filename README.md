@@ -35,9 +35,7 @@ Notifications
 
 ## Installation
 
-1. Clone the repository
 
-```git clone https://mohsin606@bitbucket.org/pl-repos/real-time-chat-1.git```
 
 2. Change the working directory
 
@@ -66,7 +64,6 @@ Notifications
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/11601978/2s9YeK5qSf)
 
 ## Database Schema
-![Public](https://i.ibb.co/0YQYQ5Q/real-time-chat.png)
 
 
 
